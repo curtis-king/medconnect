@@ -67,6 +67,11 @@ class DossierMedical extends Model
         'reference_paiement_inscription',
         'encaisse_par_user_id',
         'encaisse_le',
+        'employeur_nom',
+        'employeur_adresse',
+        'employeur_telephone',
+        'employeur_email',
+        'responsable_user_id',
     ];
 
     /**
@@ -198,6 +203,11 @@ class DossierMedical extends Model
     public function validateurDocuments()
     {
         return $this->belongsTo(User::class, 'documents_validation_personnel_user_id');
+    }
+
+    public function responsable()
+    {
+        return $this->belongsTo(User::class, 'responsable_user_id');
     }
 
     /**

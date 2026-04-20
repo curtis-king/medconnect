@@ -4,6 +4,7 @@ namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\MorphMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 
@@ -238,5 +239,59 @@ class User extends Authenticatable
     public function consultationsProfessionnelles()
     {
         return $this->hasMany(ConsultationProfessionnelle::class, 'patient_user_id');
+    }
+
+    /**
+     * ==================== SANCTUM API TOKENS ====================
+     */
+
+    /**
+     * Get user's API tokens
+     */
+    public function tokens(): MorphMany
+    {
+        return $this->morphMany(\App\Models\PersonalAccessToken::class, 'tokenable');
+    }
+
+    /**
+     * Get user's authentication tokens (non-Sanctum)
+     */
+    public function authTokens()
+    {
+        return $this->hasMany(\App\Models\AuthToken::class, 'user_id');
+    }
+
+    /**
+     * Create a new API token directly in DB
+     */
+    public function createToken(string $name, array $abilities = ['*'], ?\DateTime $expiresAt = null)
+    {
+        $plainTextToken = bin2hex(random_bytes(40));
+        $hashedToken = hash('sha256', $plainTextToken);
+
+        // Insert directly into personal_access_tokens table
+        \DB::table('personal_access_tokens')->insert([
+            'tokenable_type' => static::class,
+            'tokenable_id' => $this->id,
+            'name' => $name,
+            'token' => $hashedToken,
+            'abilities' => json_encode($abilities),
+            'expires_at' => $expiresAt,
+            'created_at' => now(),
+            'updated_at' => now(),
+        ]);
+
+        // Return object with plainTextToken (matches Sanctum API)
+        return (object) [
+            'plainTextToken' => $plainTextToken,
+        ];
+    }
+
+    /**
+     * Get current logged in token
+     */
+    public function currentAccessToken()
+    {
+        return $this->tokens()->latest()->first();
     }
 }

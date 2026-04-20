@@ -22,8 +22,12 @@ class Frais extends Model
     ];
 
     public const TYPES = [
-        'inscription' => 'Inscription',
-        'reabonnement' => 'Réabonnement',
+        'inscription' => 'Inscription Patient',
+        'inscription_pro' => 'Inscription Professionnel',
+        'abonnement_mensuel' => 'Abonnement Mensuel',
+        'abonnement_bimestriel' => 'Abonnement Bimestriel',
+        'abonnement_semestriel' => 'Abonnement Semestriel',
+        'abonnement_annuel' => 'Abonnement Annuel',
         'contribution' => 'Contribution',
     ];
 
@@ -32,6 +36,6 @@ class Frais extends Model
      */
     public function getPrixFormattedAttribute(): string
     {
-        return number_format($this->prix, 2, ',', ' ').' €';
+        return number_format($this->prix, 0, ',', ' ').' Fcfa';
     }
 }

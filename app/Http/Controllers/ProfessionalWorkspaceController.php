@@ -2,8 +2,8 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\UpdateConsultationProfessionnelleRequest;
 use App\Http\Requests\GenerateTreatmentSuggestionRequest;
+use App\Http\Requests\UpdateConsultationProfessionnelleRequest;
 use App\Models\ConsultationDocument;
 use App\Models\ConsultationProfessionnelle;
 use App\Models\DossierMedical;

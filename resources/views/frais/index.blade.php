@@ -66,9 +66,11 @@
                                             <td class="px-6 py-4 whitespace-nowrap text-center">
                                                 <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium
                                                     @if($frai->type === 'inscription') bg-blue-100 text-blue-800
+                                                    @elseif($frai->type === 'inscription_pro') bg-indigo-100 text-indigo-800
+                                                    @elseif(str_contains($frai->type, 'abonnement')) bg-green-100 text-green-800
                                                     @elseif($frai->type === 'reabonnement') bg-green-100 text-green-800
                                                     @else bg-purple-100 text-purple-800 @endif">
-                                                    {{ \App\Models\Frais::TYPES[$frai->type] }}
+                                                    {{ \App\Models\Frais::TYPES[$frai->type] ?? ucfirst(str_replace('_', ' ', $frai->type)) }}
                                                 </span>
                                             </td>
                                             <td class="px-6 py-4 text-center">

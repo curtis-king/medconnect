@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\ControleClientController;
 use App\Http\Controllers\ControleClientDocumentController;
+use App\Http\Controllers\DemandeServiceController;
 use App\Http\Controllers\DossierMedicalController;
 use App\Http\Controllers\DossierProfessionnelController;
 use App\Http\Controllers\FraisController;
@@ -10,6 +11,7 @@ use App\Http\Controllers\PaiementController;
 use App\Http\Controllers\ProfessionalWorkspaceController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\RendezVousController;
+use App\Http\Controllers\ServiceMedicalController;
 use App\Http\Controllers\ServiceProfessionnelController;
 use App\Http\Controllers\SubscriptionController;
 use App\Http\Controllers\SubscriptionProfessionnelleController;
@@ -222,6 +224,23 @@ Route::middleware('auth')->group(function () {
         Route::patch('paiements/{paiement}/confirm', [PaiementController::class, 'confirmPayment'])->name('paiements.confirm');
         Route::get('paiements/{paiement}/pdf', [PaiementController::class, 'pdf'])->name('paiements.pdf');
         Route::get('paiements/check-expired', [PaiementController::class, 'checkExpiredPaiements'])->name('paiements.check-expired');
+
+        // Routes pour les services médicaux
+        Route::resource('services-medicaux', ServiceMedicalController::class)->parameters([
+            'services-medicaux' => 'service',
+        ]);
+
+        // Routes pour les demandes de services
+        Route::get('demandes-services', [DemandeServiceController::class, 'index'])->name('demandes-services.index');
+        Route::get('demandes-services/en-attente', [DemandeServiceController::class, 'enAttente'])->name('demandes-services.en-attente');
+        Route::get('demandes-services/{demande}', [DemandeServiceController::class, 'show'])->name('demandes-services.show');
+        Route::get('demandes-services/{demande}/edit', [DemandeServiceController::class, 'edit'])->name('demandes-services.edit');
+        Route::patch('demandes-services/{demande}/valider', [DemandeServiceController::class, 'valider'])->name('demandes-services.valider');
+        Route::patch('demandes-services/{demande}/rejeter', [DemandeServiceController::class, 'rejeter'])->name('demandes-services.rejeter');
+        Route::patch('demandes-services/{demande}/terminer', [DemandeServiceController::class, 'terminer'])->name('demandes-services.terminer');
+        Route::post('demandes-services/{demande}/piece-jointe', [DemandeServiceController::class, 'storePieceJointe'])->name('demandes-services.piece-jointe');
+        Route::post('demandes-services/{demande}/rendez-vous', [DemandeServiceController::class, 'storeRendezVous'])->name('demandes-services.rendez-vous');
+        Route::post('demandes-services/{demande}/facture', [DemandeServiceController::class, 'storeFacture'])->name('demandes-services.facture');
 
         // Routes pour le contrôle et renseignement client
         Route::get('controle-client', [ControleClientController::class, 'index'])->name('controle-client.index');

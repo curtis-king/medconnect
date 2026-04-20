@@ -1,11 +1,11 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
     <head>
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
-        <title>{{ config('app.name', 'MedConnect') }}</title>
+        <title>{{ config('app.name', 'MedConnect') }} - La Sante, Reinventee avec Clarte</title>
         <link rel="preconnect" href="https://fonts.bunny.net">
-        <link href="https://fonts.bunny.net/css?family=instrument-sans:400,500,600" rel="stylesheet" />
+        <link href="https://fonts.bunny.net/css?family=instrument-sans:400,500,600,700|instrument-serif:400i" rel="stylesheet" />
         @if (file_exists(public_path('build/manifest.json')) || file_exists(public_path('hot')))
             @vite(['resources/css/app.css', 'resources/js/app.js'])
         @else
@@ -16,8 +16,7 @@
                 theme: {
                     extend: {
                         colors: {
-                            brandBlue: '#2563eb',
-                            brandGreen: '#059669',
+                            teal:  { DEFAULT: '#1a7b72', dark: '#16645E', light: '#e8f5f4' },
                         },
                         fontFamily: {
                             sans: ['Instrument Sans', 'ui-sans-serif', 'system-ui'],
@@ -26,278 +25,351 @@
                 },
             };
         </script>
+        <style>
+            .hero-img { background: linear-gradient(135deg, #88cec8 0%, #f0faf9 100%); }
+            details summary::-webkit-details-marker { display: none; }
+        </style>
     </head>
-    <body class="bg-white text-slate-900 antialiased">
-        <!-- Navigation Header -->
-        <header class="sticky top-0 z-50 border-b border-slate-200 bg-white/95 backdrop-blur">
-            <div class="mx-auto flex w-full max-w-7xl items-center justify-between px-4 py-4 sm:px-6 lg:px-8">
+
+    <body class="bg-white font-sans text-slate-800 antialiased">
+
+        <!-- ── NAVBAR ───────────────────────────────────────────────── -->
+        <header class="sticky top-0 z-50 border-b border-slate-100 bg-white">
+            <div class="mx-auto flex max-w-7xl items-center justify-between px-6 py-4 lg:px-8">
+                <span class="text-lg font-bold tracking-tight text-slate-900">MedConnect</span>
+                <nav class="hidden items-center gap-7 text-sm font-medium text-slate-600 md:flex">
+                    <a href="#about"    class="hover:text-slate-900 transition">A propos</a>
+                    <a href="#services" class="hover:text-slate-900 transition">Services</a>
+                    <a href="#pricing"  class="hover:text-slate-900 transition">Tarifs</a>
+                    <a href="#faq"      class="hover:text-slate-900 transition">FAQ</a>
+                    <a href="#contact"  class="hover:text-slate-900 transition">Contact</a>
+                </nav>
                 <div class="flex items-center gap-3">
-                    <img src="/meconnect.png" alt="MedConnect" class="h-9 w-9 rounded-lg object-cover ring-1 ring-slate-200">
-                    <span class="bg-gradient-to-r from-brandBlue to-brandGreen bg-clip-text text-xl font-extrabold text-transparent">MedConnect</span>
-                </div>
-                <nav class="flex items-center gap-2 sm:gap-4">
                     @auth
-                        <a href="{{ url('/dashboard') }}" class="rounded-xl bg-gradient-to-r from-brandBlue to-brandGreen px-4 py-2 text-sm font-semibold text-white shadow transition hover:-translate-y-0.5 hover:shadow-lg">Tableau de bord</a>
+                        <a href="{{ url('/dashboard') }}" class="rounded-md bg-[#1a7b72] px-4 py-2 text-sm font-semibold text-white hover:bg-[#0f5c55] transition">Tableau de bord</a>
                     @else
-                        <a href="{{ route('login') }}" class="rounded-xl px-3 py-2 text-sm font-semibold text-slate-700 transition hover:bg-slate-100 hover:text-brandBlue">Connexion</a>
+                        <a href="{{ route('login') }}" class="text-sm font-semibold text-slate-700 hover:text-slate-900 transition">Connexion</a>
                         @if (Route::has('register'))
-                            <a href="{{ route('register') }}" class="rounded-xl bg-gradient-to-r from-brandBlue to-brandGreen px-4 py-2 text-sm font-semibold text-white shadow transition hover:-translate-y-0.5 hover:shadow-lg">S'inscrire</a>
+                            <a href="{{ route('register') }}" class="rounded-md bg-[#1a7b72] px-4 py-2 text-sm font-semibold text-white hover:bg-[#0f5c55] transition">Rejoindre</a>
                         @endif
                     @endauth
-                </nav>
+                </div>
             </div>
         </header>
 
-        <!-- Hero Section -->
-        <section class="relative overflow-hidden bg-gradient-to-br from-brandBlue via-blue-700 to-brandGreen px-4 py-24 text-white sm:px-6 lg:px-8">
-            <div class="absolute inset-0 opacity-20">
-                <div class="absolute -left-20 -top-20 h-80 w-80 rounded-full bg-white/30 blur-2xl"></div>
-                <div class="absolute -bottom-24 -right-16 h-96 w-96 rounded-full bg-emerald-300/30 blur-2xl"></div>
-            </div>
-            <div class="relative z-10 mx-auto max-w-7xl text-center">
-                <p class="mb-4 inline-flex items-center rounded-full bg-white/20 px-4 py-1 text-xs font-semibold uppercase tracking-wider">Plateforme sante connectee</p>
-                <h1 class="mx-auto max-w-5xl text-4xl font-black leading-tight sm:text-5xl lg:text-6xl">Bienvenue sur MedConnect</h1>
-                <p class="mx-auto mt-6 max-w-3xl text-base text-blue-50 sm:text-lg">
-                    La plateforme de santé numérique qui connecte patients, professionnels et structures médicales pour un parcours de soins optimisé, transparent et sécurisé.
-                </p>
-                <div class="mt-10 flex flex-wrap items-center justify-center gap-4">
-                    @if (Route::has('register'))
-                        <a href="{{ route('register') }}" class="rounded-xl bg-white px-7 py-3 text-sm font-bold text-brandBlue shadow-lg transition hover:-translate-y-0.5 hover:shadow-xl">Commencer maintenant</a>
-                    @endif
-                    <a href="#apropos" class="rounded-xl border-2 border-white/80 px-7 py-3 text-sm font-bold text-white transition hover:-translate-y-0.5 hover:bg-white/15">En savoir plus</a>
-                </div>
-            </div>
-        </section>
-
-        <!-- À Propos Section -->
-        <section id="apropos" class="bg-slate-50 px-4 py-20 sm:px-6 lg:px-8">
-            <div class="mx-auto max-w-7xl">
-                <h2 class="text-center text-3xl font-extrabold text-slate-900 sm:text-4xl">À propos de MedConnect</h2>
-                <div class="mt-12 grid gap-10 lg:grid-cols-2 lg:items-center">
-                    <div>
-                        <p class="text-base leading-8 text-slate-600">MedConnect est une plateforme innovante conçue pour révolutionner l'accès aux soins de santé. Elle offre une expérience transparente et sécurisée pour les patients, les professionnels de santé et les structures médicales.</p>
-                        <p class="mt-4 text-base leading-8 text-slate-600">Avec un système de validation d'identité avancé, une gestion complète des dossiers médicaux, et des outils de paiement flexibles, MedConnect simplifie chaque étape de votre parcours médical.</p>
-                        <div class="mt-6 space-y-3">
-                            <div class="flex items-center gap-3 text-slate-700">
-                                <span class="inline-flex h-6 w-6 items-center justify-center rounded-full bg-emerald-100 text-sm font-bold text-brandGreen">✓</span>
-                                <span>Sécurité et conformité des données</span>
-                            </div>
-                            <div class="flex items-center gap-3 text-slate-700">
-                                <span class="inline-flex h-6 w-6 items-center justify-center rounded-full bg-emerald-100 text-sm font-bold text-brandGreen">✓</span>
-                                <span>Interface mobile-first intuitive</span>
-                            </div>
-                            <div class="flex items-center gap-3 text-slate-700">
-                                <span class="inline-flex h-6 w-6 items-center justify-center rounded-full bg-emerald-100 text-sm font-bold text-brandGreen">✓</span>
-                                <span>Support 24/7 multilingue</span>
-                            </div>
-                            <div class="flex items-center gap-3 text-slate-700">
-                                <span class="inline-flex h-6 w-6 items-center justify-center rounded-full bg-emerald-100 text-sm font-bold text-brandGreen">✓</span>
-                                <span>Paiements flexibles et sécurisés</span>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="flex h-80 items-center justify-center rounded-2xl bg-gradient-to-br from-blue-100 to-emerald-100 p-12">
-                        <svg class="h-24 w-24 text-brandBlue" fill="currentColor" viewBox="0 0 24 24">
-                            <path d="M11.99 5.51C6.47 5.51 2 7.48 2 10s4.47 4.49 9.99 4.49S22 12.51 22 10s-4.48-4.49-10.01-4.49zM11.99 13c-4.42 0-8-1.79-8-4s3.58-4 8-4 8 1.79 8 4-3.58 4-8 4zm0-12C6.48 1 2 3.43 2 6.46v11.08C2 20.57 6.48 23 12 23s10-2.43 10-5.46V6.46C22 3.43 17.52 1 12 1zm0 19.84c-4.42 0-8-1.79-8-4v-3.5c1.49 1.46 4.38 2.5 8 2.5s6.51-1.04 8-2.5v3.5c0 2.21-3.58 4-8 4z"/>
-                        </svg>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <!-- Statistiques Section -->
-        <section class="bg-white px-4 py-20 sm:px-6 lg:px-8">
-            <div class="mx-auto max-w-7xl">
-                <h2 class="text-center text-3xl font-extrabold text-slate-900 sm:text-4xl">Nos chiffres clés</h2>
-                <div class="mt-12 grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
-                    <div class="rounded-2xl border-2 border-blue-100 bg-gradient-to-br from-blue-50 to-emerald-50 p-8 text-center transition hover:scale-105 hover:border-blue-200">
-                        <div class="bg-gradient-to-r from-brandBlue to-brandGreen bg-clip-text text-4xl font-black text-transparent">50K+</div>
-                        <p class="mt-1 text-sm text-slate-600">Utilisateurs actifs</p>
-                    </div>
-                    <div class="rounded-2xl border-2 border-emerald-100 bg-gradient-to-br from-emerald-50 to-blue-50 p-8 text-center transition hover:scale-105 hover:border-emerald-200">
-                        <div class="bg-gradient-to-r from-brandBlue to-brandGreen bg-clip-text text-4xl font-black text-transparent">1200+</div>
-                        <p class="mt-1 text-sm text-slate-600">Professionnels validés</p>
-                    </div>
-                    <div class="rounded-2xl border-2 border-blue-100 bg-gradient-to-br from-blue-50 to-emerald-50 p-8 text-center transition hover:scale-105 hover:border-blue-200">
-                        <div class="bg-gradient-to-r from-brandBlue to-brandGreen bg-clip-text text-4xl font-black text-transparent">500M+</div>
-                        <p class="mt-1 text-sm text-slate-600">XAF traités annuels</p>
-                    </div>
-                    <div class="rounded-2xl border-2 border-emerald-100 bg-gradient-to-br from-emerald-50 to-blue-50 p-8 text-center transition hover:scale-105 hover:border-emerald-200">
-                        <div class="bg-gradient-to-r from-brandBlue to-brandGreen bg-clip-text text-4xl font-black text-transparent">99.9%</div>
-                        <p class="mt-1 text-sm text-slate-600">Uptime garanti</p>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <!-- Services Section -->
-        <section class="bg-slate-50 px-4 py-20 sm:px-6 lg:px-8">
-            <div class="mx-auto max-w-7xl">
-                <h2 class="text-center text-3xl font-extrabold text-slate-900 sm:text-4xl">Nos services et avantages</h2>
-                <div class="mt-12 grid gap-6 md:grid-cols-2 xl:grid-cols-3">
-                    <div class="rounded-2xl border border-slate-200 bg-white p-8 shadow-sm transition duration-300 hover:-translate-y-2 hover:shadow-xl">
-                        <svg class="mb-4 h-12 w-12 text-brandBlue" fill="currentColor" viewBox="0 0 24 24"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zM9 17H7v-7h2V17zm4 0h-2V7h2V17zm4 0h-2v-4h2V17z"/></svg>
-                        <h3 class="text-xl font-bold text-slate-900">Gestion des dossiers</h3>
-                        <p class="mt-2 text-slate-600">Dossiers médicaux numériques complets avec contrôle d'accès sécurisé et historique médical centralisé.</p>
-                        <a href="#" class="mt-4 inline-block font-semibold text-brandBlue transition hover:text-blue-700">En savoir plus →</a>
-                    </div>
-
-                    <div class="rounded-2xl border border-slate-200 bg-white p-8 shadow-sm transition duration-300 hover:-translate-y-2 hover:shadow-xl">
-                        <svg class="mb-4 h-12 w-12 text-brandGreen" fill="currentColor" viewBox="0 0 24 24"><path d="M19 6h-2.15c-.74-1.9-2.54-3.25-4.85-3.25s-4.11 1.35-4.85 3.25H5c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V8c0-1.1-.9-2-2-2zm-7 14c-.55 0-1-.45-1-1s.45-1 1-1 1 .45 1 1-.45 1-1 1zm5-4H7V7h10v9z"/></svg>
-                        <h3 class="text-xl font-bold text-slate-900">Rendez-vous en ligne</h3>
-                        <p class="mt-2 text-slate-600">Prenez rendez-vous facilement avec des professionnels validés, gérez votre agenda médical simplement.</p>
-                        <a href="#" class="mt-4 inline-block font-semibold text-brandBlue transition hover:text-blue-700">En savoir plus →</a>
-                    </div>
-
-                    <div class="rounded-2xl border border-slate-200 bg-white p-8 shadow-sm transition duration-300 hover:-translate-y-2 hover:shadow-xl">
-                        <svg class="mb-4 h-12 w-12 text-brandBlue" fill="currentColor" viewBox="0 0 24 24"><path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4zm0 10.99h7c-.53 4.12-3.28 7.72-7 8.77V12H5V6.3l7-3.11v8.8z"/></svg>
-                        <h3 class="text-xl font-bold text-slate-900">Sécurité renforcée</h3>
-                        <p class="mt-2 text-slate-600">Validation d'identité par IA, détection de fraude, conformité RGPD et chiffrement de bout en bout.</p>
-                        <a href="#" class="mt-4 inline-block font-semibold text-brandBlue transition hover:text-blue-700">En savoir plus →</a>
-                    </div>
-
-                    <div class="rounded-2xl border border-slate-200 bg-white p-8 shadow-sm transition duration-300 hover:-translate-y-2 hover:shadow-xl">
-                        <svg class="mb-4 h-12 w-12 text-brandGreen" fill="currentColor" viewBox="0 0 24 24"><path d="M17 2H7c-1.1 0-2 .9-2 2v16c0 1.1.9 2 2 2h10c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm-5 18c-.55 0-1-.45-1-1s.45-1 1-1 1 .45 1 1-.45 1-1 1zm5-3H7V4h10v13z"/></svg>
-                        <h3 class="text-xl font-bold text-slate-900">Application mobile</h3>
-                        <p class="mt-2 text-slate-600">Interface optimisée pour smartphones, notifications en temps réel, accès à tous vos documents.</p>
-                        <a href="#" class="mt-4 inline-block font-semibold text-brandBlue transition hover:text-blue-700">En savoir plus →</a>
-                    </div>
-
-                    <div class="rounded-2xl border border-slate-200 bg-white p-8 shadow-sm transition duration-300 hover:-translate-y-2 hover:shadow-xl">
-                        <svg class="mb-4 h-12 w-12 text-brandBlue" fill="currentColor" viewBox="0 0 24 24"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm0 16H5V5h14v14zm-5-7l-4-4-4 4h2v6h4v-6h2z"/></svg>
-                        <h3 class="text-xl font-bold text-slate-900">Paiements flexibles</h3>
-                        <p class="mt-2 text-slate-600">Paiements en ligne sécurisés avec options multiples: Mobile Money, carte bancaire et abonnements.</p>
-                        <a href="#" class="mt-4 inline-block font-semibold text-brandBlue transition hover:text-blue-700">En savoir plus →</a>
-                    </div>
-
-                    <div class="rounded-2xl border border-slate-200 bg-white p-8 shadow-sm transition duration-300 hover:-translate-y-2 hover:shadow-xl">
-                        <svg class="mb-4 h-12 w-12 text-brandGreen" fill="currentColor" viewBox="0 0 24 24"><path d="M5 9.2h3V19H5zM10.6 5h2.8v14h-2.8zm5.6 8H19v6h-2.8z"/></svg>
-                        <h3 class="text-xl font-bold text-slate-900">Tableau de bord analytique</h3>
-                        <p class="mt-2 text-slate-600">Suivi de vos dépenses médicales, historique de rendez-vous et statistiques personnalisées.</p>
-                        <a href="#" class="mt-4 inline-block font-semibold text-brandBlue transition hover:text-blue-700">En savoir plus →</a>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <!-- Testimonials Section -->
-        <section class="bg-white px-4 py-20 sm:px-6 lg:px-8">
-            <div class="mx-auto max-w-7xl">
-                <h2 class="text-center text-3xl font-extrabold text-slate-900 sm:text-4xl">Ce que nos utilisateurs en disent</h2>
-                <div class="mt-12 grid gap-6 md:grid-cols-3">
-                    <div class="rounded-2xl border-l-4 border-brandBlue bg-gradient-to-br from-blue-50 to-emerald-50 p-8 shadow-sm transition hover:-translate-y-1 hover:shadow-lg">
-                        <div class="mb-3 text-lg tracking-wider text-amber-400">★★★★★</div>
-                        <p class="text-sm italic leading-7 text-slate-700">"MedConnect a complètement transformé ma façon de gérer mes rendez-vous médicaux. C'est tellement simple et efficace!"</p>
-                        <div class="mt-4 font-bold text-slate-900">Marie Dupont</div>
-                        <div class="text-xs text-slate-500">Patient, Yaoundé</div>
-                    </div>
-
-                    <div class="rounded-2xl border-l-4 border-brandGreen bg-gradient-to-br from-emerald-50 to-blue-50 p-8 shadow-sm transition hover:-translate-y-1 hover:shadow-lg">
-                        <div class="mb-3 text-lg tracking-wider text-amber-400">★★★★★</div>
-                        <p class="text-sm italic leading-7 text-slate-700">"En tant que professionnel, j'apprécie la sécurité et la facilité d'accès aux dossiers de mes patients. Excellent!"</p>
-                        <div class="mt-4 font-bold text-slate-900">Dr. Jean Nkomo</div>
-                        <div class="text-xs text-slate-500">Médecin, Douala</div>
-                    </div>
-
-                    <div class="rounded-2xl border-l-4 border-brandBlue bg-gradient-to-br from-blue-50 to-emerald-50 p-8 shadow-sm transition hover:-translate-y-1 hover:shadow-lg">
-                        <div class="mb-3 text-lg tracking-wider text-amber-400">★★★★★</div>
-                        <p class="text-sm italic leading-7 text-slate-700">"L'interface est ergonomique et les paiements sécurisés. Vraiment content d'utiliser MedConnect!"</p>
-                        <div class="mt-4 font-bold text-slate-900">Sophie Martin</div>
-                        <div class="text-xs text-slate-500">Infirmière, Libreville</div>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <!-- Adhésion Section -->
-        <section class="relative overflow-hidden bg-gradient-to-r from-brandBlue to-brandGreen px-4 py-20 text-white sm:px-6 lg:px-8">
-            <div class="absolute inset-0 opacity-20">
-                <div class="absolute -right-10 -top-12 h-80 w-80 rounded-full bg-white/30 blur-2xl"></div>
-            </div>
-            <div class="relative z-10 mx-auto max-w-4xl text-center">
-                <h2 class="text-center text-3xl font-extrabold text-white sm:text-4xl">Prêt à rejoindre MedConnect?</h2>
-                <p class="mt-4 text-blue-50">
-                    Inscrivez-vous dès maintenant et accédez à une plateforme de santé moderne, sécurisée et performante. Gratuit et facile!
-                </p>
-                <div class="mt-8 flex flex-wrap items-center justify-center gap-4">
-                    @if (Route::has('register'))
-                        <a href="{{ route('register') }}" class="rounded-xl bg-white px-7 py-3 text-sm font-bold text-brandBlue shadow-lg transition hover:-translate-y-0.5 hover:shadow-xl">S'inscrire maintenant</a>
-                    @endif
-                    <a href="{{ route('login') }}" class="rounded-xl border-2 border-white/80 px-7 py-3 text-sm font-bold text-white transition hover:-translate-y-0.5 hover:bg-white/15">Déjà inscrit? Se connecter</a>
-                </div>
-            </div>
-        </section>
-
-        <!-- Publicité & Partenaires Section -->
-        <section class="bg-slate-50 px-4 py-16 sm:px-6 lg:px-8">
-            <div class="mx-auto max-w-7xl">
-                <div class="mb-16">
-                    <h3 class="mb-8 text-center text-2xl font-extrabold text-slate-900">Espace Publicitaire</h3>
-                    <div class="rounded-2xl border-2 border-blue-200 bg-gradient-to-r from-blue-100 to-emerald-100 p-12 text-center">
-                        <p class="mx-auto max-w-2xl text-lg text-slate-700">
-                            Vous êtes une entreprise intéressée par le partenariat ou la publicité?
-                        </p>
-                        <a href="mailto:contact@medconnect.cm" class="mt-5 inline-block rounded-xl bg-brandBlue px-6 py-2.5 text-sm font-semibold text-white shadow transition hover:-translate-y-0.5 hover:bg-blue-700">Nous contacter</a>
-                    </div>
-                </div>
-
+        <!-- ── HERO ──────────────────────────────────────────────────── -->
+        <section class="bg-[#f4faf9]" id="about">
+            <div class="mx-auto grid max-w-7xl grid-cols-1 gap-12 px-6 py-20 lg:grid-cols-2 lg:items-center lg:px-8">
                 <div>
-                    <h3 class="mb-10 text-center text-2xl font-extrabold text-slate-900">Nos partenaires de confiance</h3>
-                    <div class="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
-                        <div class="rounded-2xl border border-slate-200 bg-white p-6 text-center shadow-sm transition hover:-translate-y-1 hover:shadow-lg">
-                            <p class="font-bold text-slate-700">Partenaire 1</p>
-                        </div>
-                        <div class="rounded-2xl border border-slate-200 bg-white p-6 text-center shadow-sm transition hover:-translate-y-1 hover:shadow-lg">
-                            <p class="font-bold text-slate-700">Partenaire 2</p>
-                        </div>
-                        <div class="rounded-2xl border border-slate-200 bg-white p-6 text-center shadow-sm transition hover:-translate-y-1 hover:shadow-lg">
-                            <p class="font-bold text-slate-700">Partenaire 3</p>
-                        </div>
-                        <div class="rounded-2xl border border-slate-200 bg-white p-6 text-center shadow-sm transition hover:-translate-y-1 hover:shadow-lg">
-                            <p class="font-bold text-slate-700">Partenaire 4</p>
+                    <span class="inline-flex items-center gap-2 rounded-full border border-[#1a7b72]/30 bg-white px-3 py-1 text-xs font-semibold uppercase tracking-widest text-[#1a7b72]">
+                        <svg class="h-3 w-3 fill-[#1a7b72]" viewBox="0 0 16 16"><circle cx="8" cy="8" r="8"/></svg>
+
+                        Sanctuaire Numerique de Sante Certifie
+                    </span>
+                    <h1 class="mt-6 text-4xl font-bold leading-tight text-slate-900 sm:text-5xl lg:text-[3.25rem]">
+                        La Sante,<br>
+                        <em class="not-italic text-[#1a7b72]" style="font-family:'Instrument Sans',sans-serif;font-style:italic;font-weight:700;">Reinventee</em> avec<br>
+                        Clarte.
+                    </h1>
+                    <p class="mt-5 max-w-md text-base leading-relaxed text-slate-500">
+                        MedConnect connecte les professionnels de sante, les patients et les assureurs au sein d'un ecosysteme fluide et serein.
+                    </p>
+                    <div class="mt-8 flex flex-wrap gap-3">
+                        @if (Route::has('register'))
+                            <a href="{{ route('register') }}" class="rounded-md bg-[#1a7b72] px-6 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-[#0f5c55] transition">Commencer Aujourd'hui</a>
+                        @endif
+                        <a href="#services" class="rounded-md border border-slate-300 bg-white px-6 py-2.5 text-sm font-semibold text-slate-700 hover:bg-slate-50 transition">Voir Comment Ca Fonctionne</a>
+                    </div>
+                </div>
+                <div class="flex items-center justify-center">
+                    <div class="hero-img overflow-hidden rounded-2xl shadow-lg" style="width:420px;height:320px;max-width:100%;">
+                        <div class="flex h-full w-full items-center justify-center bg-gradient-to-br from-[#e0f2ef] to-[#c9ebe6]">
+                            <svg class="h-32 w-32 text-[#1a7b72]/40" fill="currentColor" viewBox="0 0 24 24"><path d="M12 12c2.7 0 4.8-2.1 4.8-4.8S14.7 2.4 12 2.4 7.2 4.5 7.2 7.2 9.3 12 12 12zm0 2.4c-3.2 0-9.6 1.6-9.6 4.8v2.4h19.2v-2.4c0-3.2-6.4-4.8-9.6-4.8z"/></svg>
                         </div>
                     </div>
                 </div>
             </div>
         </section>
 
-        <!-- Footer -->
-        <footer class="bg-gradient-to-br from-slate-900 to-slate-800 px-4 py-14 text-white sm:px-6 lg:px-8">
+        <!-- ── CONNECTING THE HEALING ECOSYSTEM ──────────────────────── -->
+        <section class="bg-white px-6 py-20 lg:px-8" id="services">
             <div class="mx-auto max-w-7xl">
-                <div class="grid gap-8 sm:grid-cols-2 lg:grid-cols-4">
+                <div class="grid grid-cols-1 gap-16 lg:grid-cols-2 lg:items-start">
+                    <!-- Left -->
                     <div>
-                        <h4 class="mb-4 text-lg font-bold text-white">MedConnect</h4>
-                        <p class="text-slate-400">Votre plateforme de santé numérique de confiance.</p>
-                    </div>
-                    <div>
-                        <h4 class="mb-4 text-lg font-bold text-white">Produit</h4>
-                        <ul class="space-y-3 text-slate-300">
-                            <li><a href="#" class="transition hover:text-blue-300">Fonctionnalités</a></li>
-                            <li><a href="#" class="transition hover:text-blue-300">Tarification</a></li>
-                            <li><a href="#" class="transition hover:text-blue-300">Sécurité</a></li>
+                        <h2 class="text-3xl font-bold text-slate-900 sm:text-4xl">Connecter<br>l'Ecosysteme de Soin</h2>
+                        <p class="mt-4 text-slate-500">Nous croyons que la sante doit etre un sanctuaire, pas une lutte. Notre plateforme harmonise les trois piliers du soin.</p>
+                        <ul class="mt-8 space-y-4">
+                            <li class="flex items-center gap-3 text-slate-700">
+                                <span class="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-[#e8f5f4]">
+                                    <svg class="h-4 w-4 text-[#1a7b72]" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M16 7a4 4 0 1 1-8 0 4 4 0 0 1 8 0zM12 14a7 7 0 0 0-7 7h14a7 7 0 0 0-7-7z"/></svg>
+                                </span>
+                                <span class="font-medium">Soins Centres sur le Patient</span>
+                            </li>
+                            <li class="flex items-center gap-3 text-slate-700">
+                                <span class="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-[#e8f5f4]">
+                                    <svg class="h-4 w-4 text-[#1a7b72]" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M9 12h6m-6 4h6m2 5H7a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5.586a1 1 0 0 1 .707.293l5.414 5.414a1 1 0 0 1 .293.707V19a2 2 0 0 1-2 2z"/></svg>
+                                </span>
+                                <span class="font-medium">Logique Pilotee par le Medecin</span>
+                            </li>
+                            <li class="flex items-center gap-3 text-slate-700">
+                                <span class="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-[#e8f5f4]">
+                                    <svg class="h-4 w-4 text-[#1a7b72]" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0 1 12 2.944a11.955 11.955 0 0 1-8.618 3.04A12.02 12.02 0 0 0 3 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/></svg>
+                                </span>
+                                <span class="font-medium">Integration des Assurances</span>
+                            </li>
                         </ul>
                     </div>
-                    <div>
-                        <h4 class="mb-4 text-lg font-bold text-white">Entreprise</h4>
-                        <ul class="space-y-3 text-slate-300">
-                            <li><a href="#" class="transition hover:text-blue-300">À propos</a></li>
-                            <li><a href="#" class="transition hover:text-blue-300">Blog</a></li>
-                            <li><a href="#" class="transition hover:text-blue-300">Carrières</a></li>
-                        </ul>
-                    </div>
-                    <div>
-                        <h4 class="mb-4 text-lg font-bold text-white">Légal</h4>
-                        <ul class="space-y-3 text-slate-300">
-                            <li><a href="#" class="transition hover:text-blue-300">Confidentialité</a></li>
-                            <li><a href="#" class="transition hover:text-blue-300">Conditions</a></li>
-                            <li><a href="#" class="transition hover:text-blue-300">Contact</a></li>
-                        </ul>
+                    <!-- Right cards -->
+                    <div class="grid gap-5">
+                        <div class="rounded-xl border border-slate-100 bg-slate-50 p-6 shadow-sm">
+                            <div class="mb-3 flex h-10 w-10 items-center justify-center rounded-lg bg-[#e8f5f4]">
+                                <svg class="h-5 w-5 text-[#1a7b72]" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M9 12h6m-6 4h6m2 5H7a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5.586a1 1 0 0 1 .707.293l5.414 5.414a1 1 0 0 1 .293.707V19a2 2 0 0 1-2 2z"/></svg>
+                            </div>
+                            <h3 class="font-semibold text-slate-900">Historique Complet</h3>
+                            <p class="mt-1 text-sm text-slate-500">Acces a votre biographie medicale complete dans un tableau de bord securise et intuitif concu pour la clarte.</p>
+                        </div>
+                        <div class="rounded-xl border border-slate-100 bg-slate-50 p-6 shadow-sm">
+                            <div class="mb-3 flex h-10 w-10 items-center justify-center rounded-lg bg-[#e8f5f4]">
+                                <svg class="h-5 w-5 text-[#1a7b72]" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M9 14l-4-4 4-4M15 6l4 4-4 4M13 4l-2 16"/></svg>
+                            </div>
+                            <h3 class="font-semibold text-slate-900">Facturation Sans Friction</h3>
+                            <p class="mt-1 text-sm text-slate-500">Pipeline direct entre medecins et assureurs pour reduire les delais de remboursement et les erreurs humaines.</p>
+                        </div>
                     </div>
                 </div>
-                <div class="mt-10 border-t border-white/10 pt-8">
-                    <p class="text-center text-sm text-slate-400">&copy; 2026 MedConnect. Tous droits réservés.</p>
+            </div>
+        </section>
+
+        <!-- ── TAILORED SOLUTIONS ─────────────────────────────────────── -->
+        <section class="bg-slate-50 px-6 py-20 lg:px-8">
+            <div class="mx-auto max-w-7xl">
+                <div class="mb-12 text-center">
+                    <h2 class="text-3xl font-bold text-slate-900 sm:text-4xl">Solutions Sur Mesure</h2>
+                    <p class="mt-3 text-slate-500">Des avantages specifiques concus pour les deux cotes du stethoscope.</p>
+                </div>
+                <!-- Main two cards -->
+                <div class="grid gap-6 md:grid-cols-2">
+                    <!-- Professionals -->
+                    <div class="overflow-hidden rounded-2xl bg-white shadow-sm">
+                        <div class="h-44 bg-gradient-to-br from-slate-700 to-slate-500"></div>
+                        <div class="p-6">
+                            <span class="text-xs font-bold uppercase tracking-widest text-[#1a7b72]">Professionnels</span>
+                            <h3 class="mt-2 text-xl font-bold text-slate-900">Pratiquer avec Precision</h3>
+                            <ul class="mt-4 space-y-2 text-sm text-slate-600">
+                                <li class="flex items-center gap-2"><svg class="h-4 w-4 shrink-0 text-[#1a7b72]" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 0 1 0 1.414l-8 8a1 1 0 0 1-1.414 0l-4-4a1 1 0 0 1 1.414-1.414L8 12.586l7.293-7.293a1 1 0 0 1 1.414 0z"/></svg>Charting Patient Assiste par IA</li>
+                                <li class="flex items-center gap-2"><svg class="h-4 w-4 shrink-0 text-[#1a7b72]" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 0 1 0 1.414l-8 8a1 1 0 0 1-1.414 0l-4-4a1 1 0 0 1 1.414-1.414L8 12.586l7.293-7.293a1 1 0 0 1 1.414 0z"/></svg>Codage CIM-10 Automatise</li>
+                                <li class="flex items-center gap-2"><svg class="h-4 w-4 shrink-0 text-[#1a7b72]" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 0 1 0 1.414l-8 8a1 1 0 0 1-1.414 0l-4-4a1 1 0 0 1 1.414-1.414L8 12.586l7.293-7.293a1 1 0 0 1 1.414 0z"/></svg>Orientations Multi-Disciplinaires Securisees</li>
+                            </ul>
+                            <a href="#" class="mt-4 inline-block text-sm font-semibold text-[#1a7b72] hover:text-[#0f5c55] transition">Decouvrir les Outils Pro →</a>
+                        </div>
+                    </div>
+                    <!-- Patients -->
+                    <div class="rounded-2xl bg-[#0f5c55] p-6 text-white shadow-sm">
+                        <span class="text-xs font-bold uppercase tracking-widest text-[#a3d9d4]">Patients</span>
+                        <h3 class="mt-2 text-xl font-bold">Le Bien-Etre dans Votre Poche</h3>
+                        <p class="mt-2 text-sm text-[#c0e8e4]">Prenez des rendez-vous, suivez vos constantes et contactez votre equipe soignante via une interface securisee et elegante.</p>
+                        <div class="mt-6 flex gap-4">
+                            <div class="flex h-10 w-10 items-center justify-center rounded-lg bg-white/10">
+                                <svg class="h-5 w-5 text-white" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2z"/></svg>
+                            </div>
+                            <div class="flex h-10 w-10 items-center justify-center rounded-lg bg-white/10">
+                                <svg class="h-5 w-5 text-white" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M4.318 6.318a4.5 4.5 0 0 0 0 6.364L12 20.364l7.682-7.682a4.5 4.5 0 0 0-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 0 0-6.364 0z"/></svg>
+                            </div>
+                            <div class="flex h-10 w-10 items-center justify-center rounded-lg bg-white/10">
+                                <svg class="h-5 w-5 text-white" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M9 12h6m-6 4h6m2 5H7a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5.586a1 1 0 0 1 .707.293l5.414 5.414a1 1 0 0 1 .293.707V19a2 2 0 0 1-2 2z"/></svg>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- Three smaller cards -->
+                <div class="mt-6 grid gap-6 md:grid-cols-3">
+                    <div class="rounded-2xl bg-white p-6 shadow-sm">
+                        <div class="mb-3 flex h-10 w-10 items-center justify-center rounded-lg bg-[#e8f5f4]">
+                            <svg class="h-5 w-5 text-[#1a7b72]" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M12 15v2m-6 4h12a2 2 0 0 0 2-2v-6a2 2 0 0 0-2-2H6a2 2 0 0 0-2 2v6a2 2 0 0 0 2 2zm10-10V7a4 4 0 0 0-8 0v4h8z"/></svg>
+                        </div>
+                        <h3 class="font-semibold text-slate-900">Securite de Niveau Militaire</h3>
+                        <p class="mt-1 text-sm text-slate-500">Conforme HIPAA & RGPD. Nous chiffrons chaque type de donnee de sante.</p>
+                    </div>
+                    <div class="rounded-2xl bg-white p-6 shadow-sm">
+                        <div class="mb-3 flex h-10 w-10 items-center justify-center rounded-lg bg-[#e8f5f4]">
+                            <svg class="h-5 w-5 text-[#1a7b72]" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M9 12h6m-6 4h6m2 5H7a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5.586a1 1 0 0 1 .707.293l5.414 5.414a1 1 0 0 1 .293.707V19a2 2 0 0 1-2 2z"/></svg>
+                        </div>
+                        <h3 class="font-semibold text-slate-900">Dossiers Intelligents</h3>
+                        <p class="mt-1 text-sm text-slate-500">Transferez vos dossiers instantanement entre professionnels, sans papier ni delai.</p>
+                    </div>
+                    <div class="rounded-2xl bg-white p-6 shadow-sm">
+                        <div class="mb-3 flex h-10 w-10 items-center justify-center rounded-lg bg-[#e8f5f4]">
+                            <svg class="h-5 w-5 text-[#1a7b72]" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M15 10l4.553-2.069A1 1 0 0 1 21 8.845v6.31a1 1 0 0 1-1.447.894L15 14M5 18h8a2 2 0 0 0 2-2V8a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v8a2 2 0 0 0 2 2z"/></svg>
+                        </div>
+                        <h3 class="font-semibold text-slate-900">Telesante+</h3>
+                        <p class="mt-1 text-sm text-slate-500">Consultations virtuelles en haute definition avec surveillance integree des constantes.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ── STATS BAR ──────────────────────────────────────────────── -->
+        <section class="bg-[#0f5c55] px-6 py-14 lg:px-8">
+            <div class="mx-auto grid max-w-7xl grid-cols-2 gap-8 text-center md:grid-cols-4">
+                <div>
+                    <div class="text-3xl font-extrabold text-white">500k+</div>
+                    <div class="mt-1 text-sm font-medium text-[#a3d9d4] uppercase tracking-wide">Patients Actifs</div>
+                </div>
+                <div>
+                    <div class="text-3xl font-extrabold text-white">10k+</div>
+                    <div class="mt-1 text-sm font-medium text-[#a3d9d4] uppercase tracking-wide">Medecins Verifies</div>
+                </div>
+                <div>
+                    <div class="text-3xl font-extrabold text-white">150+</div>
+                    <div class="mt-1 text-sm font-medium text-[#a3d9d4] uppercase tracking-wide">Partenaires Assurance</div>
+                </div>
+                <div>
+                    <div class="text-3xl font-extrabold text-white">99.9%</div>
+                    <div class="mt-1 text-sm font-medium text-[#a3d9d4] uppercase tracking-wide">Fiabilite Garantie</div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ── PRICING ────────────────────────────────────────────────── -->
+        <section class="bg-white px-6 py-20 lg:px-8" id="pricing">
+            <div class="mx-auto max-w-5xl">
+                <div class="mb-12 text-center">
+                    <h2 class="text-3xl font-bold text-slate-900 sm:text-4xl">Offres Adaptees aux Soins</h2>
+                    <p class="mt-3 text-slate-500">Tarification simple et transparente pour chaque profil d'utilisateur.</p>
+                </div>
+                <div class="grid gap-8 md:grid-cols-2">
+                    <!-- Free plan -->
+                    <div class="rounded-2xl border border-slate-200 p-8">
+                        <div class="mb-4 flex h-10 w-10 items-center justify-center rounded-full bg-slate-100">
+                            <svg class="h-5 w-5 text-slate-600" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M16 7a4 4 0 1 1-8 0 4 4 0 0 1 8 0zM12 14a7 7 0 0 0-7 7h14a7 7 0 0 0-7-7z"/></svg>
+                        </div>
+                        <h3 class="text-lg font-bold text-slate-900">Sanctuaire Patient</h3>
+                        <p class="text-3xl font-extrabold text-slate-900 mt-3">10000 FCFA <span class="text-sm font-normal text-slate-400"></span></p>
+                        <ul class="mt-6 space-y-3 text-sm text-slate-600">
+                            <li class="flex items-center gap-2"><svg class="h-4 w-4 text-[#1a7b72]" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 0 1 0 1.414l-8 8a1 1 0 0 1-1.414 0l-4-4a1 1 0 0 1 1.414-1.414L8 12.586l7.293-7.293a1 1 0 0 1 1.414 0z"/></svg>Dossier Medical Personnel</li>
+                            <li class="flex items-center gap-2"><svg class="h-4 w-4 text-[#1a7b72]" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 0 1 0 1.414l-8 8a1 1 0 0 1-1.414 0l-4-4a1 1 0 0 1 1.414-1.414L8 12.586l7.293-7.293a1 1 0 0 1 1.414 0z"/></svg>Acces au Portail de Telesante</li>
+                            <li class="flex items-center gap-2"><svg class="h-4 w-4 text-[#1a7b72]" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 0 1 0 1.414l-8 8a1 1 0 0 1-1.414 0l-4-4a1 1 0 0 1 1.414-1.414L8 12.586l7.293-7.293a1 1 0 0 1 1.414 0z"/></svg>Messagerie Directe avec les Medecins</li>
+                        </ul>
+                        @if (Route::has('register'))
+                            <a href="{{ route('register') }}" class="mt-6 block w-full rounded-md border border-slate-300 py-2.5 text-center text-sm font-semibold text-slate-700 hover:bg-slate-50 transition">S'inscrire Maintenant</a>
+                        @endif
+                    </div>
+                    <!-- Pro plan -->
+                    <div class="relative rounded-2xl bg-[#0f5c55] p-8 text-white shadow-lg">
+                        <span class="absolute right-6 top-6 rounded-full bg-white px-3 py-0.5 text-xs font-bold text-[#0f5c55]">LE PLUS POPULAIRE</span>
+                        <div class="mb-4 flex h-10 w-10 items-center justify-center rounded-full bg-white/15">
+                            <svg class="h-5 w-5 text-white" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M9 12h6m-6 4h6m2 5H7a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5.586a1 1 0 0 1 .707.293l5.414 5.414a1 1 0 0 1 .293.707V19a2 2 0 0 1-2 2z"/></svg>
+                        </div>
+                        <h3 class="text-lg font-bold">Praticien Pro</h3>
+                        <p class="text-3xl font-extrabold mt-3">15 000 FCFA <span class="text-sm font-normal text-[#a3d9d4]">/mois</span></p>
+                        <ul class="mt-6 space-y-3 text-sm text-[#c0e8e4]">
+                            <li class="flex items-center gap-2"><svg class="h-4 w-4 text-white" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 0 1 0 1.414l-8 8a1 1 0 0 1-1.414 0l-4-4a1 1 0 0 1 1.414-1.414L8 12.586l7.293-7.293a1 1 0 0 1 1.414 0z"/></svg>Gestion Complete du Cabinet</li>
+                            <li class="flex items-center gap-2"><svg class="h-4 w-4 text-white" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 0 1 0 1.414l-8 8a1 1 0 0 1-1.414 0l-4-4a1 1 0 0 1 1.414-1.414L8 12.586l7.293-7.293a1 1 0 0 1 1.414 0z"/></svg>Passerelle d'Integration des Assurances</li>
+                            <li class="flex items-center gap-2"><svg class="h-4 w-4 text-white" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 0 1 0 1.414l-8 8a1 1 0 0 1-1.414 0l-4-4a1 1 0 0 1 1.414-1.414L8 12.586l7.293-7.293a1 1 0 0 1 1.414 0z"/></svg>Charting IA Illimite</li>
+                        </ul>
+                        @if (Route::has('register'))
+                            <a href="{{ route('register') }}" class="mt-6 block w-full rounded-md bg-white py-2.5 text-center text-sm font-bold text-[#0f5c55] hover:bg-slate-50 transition">Demarrer l'Essai Gratuit 30 Jours</a>
+                        @endif
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ── FAQ ───────────────────────────────────────────────────── -->
+        <section class="bg-slate-50 px-6 py-20 lg:px-8" id="faq">
+            <div class="mx-auto max-w-3xl">
+                <h2 class="mb-10 text-center text-3xl font-bold text-slate-900 sm:text-4xl">Questions Frequentes</h2>
+                <div class="space-y-4">
+                    <details class="group rounded-xl border border-slate-200 bg-white">
+                        <summary class="flex cursor-pointer list-none items-center justify-between px-6 py-4 font-medium text-slate-900 hover:text-[#1a7b72] transition">
+                            Comment MedConnect protege-t-il mes donnees ?
+                            <svg class="h-5 w-5 shrink-0 text-slate-400 transition-transform group-open:rotate-180" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M19 9l-7 7-7-7"/></svg>
+                        </summary>
+                        <div class="border-t border-slate-100 px-6 py-4 text-sm leading-relaxed text-slate-500">
+                            Nous utilisons le chiffrement de bout en bout, des controles d'acces stricts et sommes entierement conformes HIPAA & RGPD. Vos donnees medicales ne sont jamais vendues ni partagees sans votre consentement explicite.
+                        </div>
+                    </details>
+                    <details class="group rounded-xl border border-slate-200 bg-white">
+                        <summary class="flex cursor-pointer list-none items-center justify-between px-6 py-4 font-medium text-slate-900 hover:text-[#1a7b72] transition">
+                            Puis-je lier mon assurance sante actuelle ?
+                            <svg class="h-5 w-5 shrink-0 text-slate-400 transition-transform group-open:rotate-180" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M19 9l-7 7-7-7"/></svg>
+                        </summary>
+                        <div class="border-t border-slate-100 px-6 py-4 text-sm leading-relaxed text-slate-500">
+                            Oui ! MedConnect s'integre avec plus de 150 assureurs. Lors de l'inscription ou depuis vos parametres de profil, vous pouvez lier votre contrat pour un traitement automatique des remboursements.
+                        </div>
+                    </details>
+                    <details class="group rounded-xl border border-slate-200 bg-white">
+                        <summary class="flex cursor-pointer list-none items-center justify-between px-6 py-4 font-medium text-slate-900 hover:text-[#1a7b72] transition">
+                            Y a-t-il des frais d'installation pour les medecins ?
+                            <svg class="h-5 w-5 shrink-0 text-slate-400 transition-transform group-open:rotate-180" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M19 9l-7 7-7-7"/></svg>
+                        </summary>
+                        <div class="border-t border-slate-100 px-6 py-4 text-sm leading-relaxed text-slate-500">
+                            Aucun frais d'installation. Les praticiens peuvent s'inscrire et demarrer immediatement avec un essai gratuit de 30 jours du forfait Praticien Pro. Apres cela, la tarification standard s'applique.
+                        </div>
+                    </details>
+                </div>
+            </div>
+        </section>
+
+        <!-- ── CONTACT ────────────────────────────────────────────────── -->
+        <section class="bg-[#0f5c55] px-6 py-20 lg:px-8" id="contact">
+            <div class="mx-auto grid max-w-7xl grid-cols-1 gap-12 lg:grid-cols-2 lg:items-start">
+                <div class="text-white">
+                    <h2 class="text-3xl font-bold sm:text-4xl">Besoin d'Aide ?</h2>
+                    <p class="mt-4 text-[#c0e8e4]">Notre equipe support est a votre disposition pour vous accompagner dans votre parcours vers une meilleure gestion de sante.</p>
+                    <div class="mt-8 space-y-4">
+                        <div class="flex items-center gap-3 text-sm text-[#c0e8e4]">
+                            <div class="flex h-9 w-9 items-center justify-center rounded-full bg-white/10">
+                                <svg class="h-4 w-4 text-white" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M3 8l7.89 5.26a2 2 0 0 0 2.22 0L21 8M5 19h14a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v10a2 2 0 0 0 2 2z"/></svg>
+                            </div>
+                            support@medconnect.health
+                        </div>
+                        <div class="flex items-center gap-3 text-sm text-[#c0e8e4]">
+                            <div class="flex h-9 w-9 items-center justify-center rounded-full bg-white/10">
+                                <svg class="h-4 w-4 text-white" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M3 5a2 2 0 0 1 2-2h3.28a1 1 0 0 1 .948.684l1.498 4.493a1 1 0 0 1-.502 1.21l-2.257 1.13a11.042 11.042 0 0 0 5.516 5.516l1.13-2.257a1 1 0 0 1 1.21-.502l4.493 1.498a1 1 0 0 1 .684.949V19a2 2 0 0 1-2 2h-1C9.716 21 3 14.284 3 6V5z"/></svg>
+                            </div>
+                            +1 (888) MED-CONN
+                        </div>
+                    </div>
+                </div>
+                <form class="rounded-2xl bg-white p-8 shadow-lg" method="POST" action="#">
+                    @csrf
+                    <div class="grid grid-cols-2 gap-4">
+                        <div>
+                            <label class="mb-1 block text-xs font-semibold uppercase tracking-wide text-slate-500">Prenom</label>
+                            <input type="text" class="w-full rounded-lg border border-slate-200 px-3 py-2 text-sm text-slate-800 focus:border-[#1a7b72] focus:outline-none focus:ring-1 focus:ring-[#1a7b72]">
+                        </div>
+                        <div>
+                            <label class="mb-1 block text-xs font-semibold uppercase tracking-wide text-slate-500">Nom</label>
+                            <input type="text" class="w-full rounded-lg border border-slate-200 px-3 py-2 text-sm text-slate-800 focus:border-[#1a7b72] focus:outline-none focus:ring-1 focus:ring-[#1a7b72]">
+                        </div>
+                    </div>
+                    <div class="mt-4">
+                        <label class="mb-1 block text-xs font-semibold uppercase tracking-wide text-slate-500">Adresse Email</label>
+                        <input type="email" class="w-full rounded-lg border border-slate-200 px-3 py-2 text-sm text-slate-800 focus:border-[#1a7b72] focus:outline-none focus:ring-1 focus:ring-[#1a7b72]">
+                    </div>
+                    <div class="mt-4">
+                        <label class="mb-1 block text-xs font-semibold uppercase tracking-wide text-slate-500">Message</label>
+                        <textarea rows="4" class="w-full rounded-lg border border-slate-200 px-3 py-2 text-sm text-slate-800 focus:border-[#1a7b72] focus:outline-none focus:ring-1 focus:ring-[#1a7b72]"></textarea>
+                    </div>
+                    <button type="submit" class="mt-4 w-full rounded-md bg-[#1a7b72] py-2.5 text-sm font-bold text-white hover:bg-[#0f5c55] transition">Envoyer la Demande</button>
+                </form>
+            </div>
+        </section>
+
+        <!-- ── FOOTER ─────────────────────────────────────────────────── -->
+        <footer class="border-t border-slate-100 bg-white px-6 py-8 lg:px-8">
+            <div class="mx-auto flex max-w-7xl flex-col items-center justify-between gap-4 text-sm text-slate-500 sm:flex-row">
+                <span class="font-bold text-slate-900">MedConnect</span>
+                <span>&copy; 2026 MedConnect &mdash; Le Sanctuaire Numerique de la Sante.</span>
+                <div class="flex gap-6">
+                    <a href="#" class="hover:text-slate-800 transition">Politique de Confidentialite</a>
+                    <a href="#" class="hover:text-slate-800 transition">Conditions d'Utilisation</a>
+                    <a href="#contact" class="hover:text-slate-800 transition">Support</a>
                 </div>
             </div>
         </footer>
+
     </body>
 </html>

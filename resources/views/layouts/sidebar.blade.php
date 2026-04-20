@@ -173,9 +173,9 @@
 
         @if(Auth::user()->role === 'admin')
         {{-- Paramètres --}}
-        <div x-data="{ open: {{ request()->routeIs(['frais.*', 'frais-inscriptions.*', 'taux-reductions.*']) ? 'true' : 'false' }} }">
+        <div x-data="{ open: {{ request()->routeIs(['frais.*', 'frais-inscriptions.*', 'taux-reductions.*', 'services-medicaux.*', 'demandes-services.*']) ? 'true' : 'false' }} }">
             <button @click="open = !open"
-                    class="sidebar-link w-full flex items-center justify-between px-3 py-3 rounded-xl {{ request()->routeIs(['frais.*', 'frais-inscriptions.*', 'taux-reductions.*']) ? 'active' : '' }}">
+                    class="sidebar-link w-full flex items-center justify-between px-3 py-3 rounded-xl {{ request()->routeIs(['frais.*', 'frais-inscriptions.*', 'taux-reductions.*', 'services-medicaux.*', 'demandes-services.*']) ? 'active' : '' }}">
                 <div class="flex items-center">
                     <div class="sidebar-icon w-10 h-10 flex items-center justify-center rounded-lg bg-amber-500/20">
                         <svg class="w-5 h-5 text-amber-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -195,6 +195,18 @@
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
                     </svg>
                     Frais
+                </a>
+                <a href="{{ route('services-medicaux.index') }}" @click="sidebarOpen = false" class="flex items-center px-3 py-2 text-sm text-slate-300 hover:text-white hover:bg-slate-700/50 rounded-lg transition-colors {{ request()->routeIs('services-medicaux.*') ? 'text-amber-400 bg-slate-700/50' : '' }}">
+                    <svg class="w-4 h-4 mr-2 text-cyan-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"/>
+                    </svg>
+                    Services
+                </a>
+                <a href="{{ route('demandes-services.index') }}" @click="sidebarOpen = false" class="flex items-center px-3 py-2 text-sm text-slate-300 hover:text-white hover:bg-slate-700/50 rounded-lg transition-colors {{ request()->routeIs('demandes-services.*') ? 'text-amber-400 bg-slate-700/50' : '' }}">
+                    <svg class="w-4 h-4 mr-2 text-orange-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"/>
+                    </svg>
+                    Demandes Services
                 </a>
                 <a href="{{ route('frais-inscriptions.index') }}" @click="sidebarOpen = false" class="flex items-center px-3 py-2 text-sm text-slate-300 hover:text-white hover:bg-slate-700/50 rounded-lg transition-colors {{ request()->routeIs('frais-inscriptions.*') ? 'text-amber-400 bg-slate-700/50' : '' }}">
                     <svg class="w-4 h-4 mr-2 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -225,6 +237,38 @@
             </div>
             <span class="ml-3 font-medium">Utilisateurs</span>
         </a>
+
+        {{-- Services Medical --}}
+        <div x-data="{ servicesOpen: {{ request()->routeIs(['services-medicaux.*', 'demandes-services.*']) ? 'true' : 'false' }} }">
+            <button @click="servicesOpen = !servicesOpen"
+                    class="sidebar-link w-full flex items-center justify-between px-3 py-3 rounded-xl {{ request()->routeIs(['services-medicaux.*', 'demandes-services.*']) ? 'active' : '' }}">
+                <div class="flex items-center">
+                    <div class="sidebar-icon w-10 h-10 flex items-center justify-center rounded-lg bg-cyan-500/20">
+                        <svg class="w-5 h-5 text-cyan-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"/>
+                        </svg>
+                    </div>
+                    <span class="ml-3 font-medium">Services</span>
+                </div>
+                <svg :class="servicesOpen ? 'rotate-180' : ''" class="w-4 h-4 transition-transform duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
+                </svg>
+            </button>
+            <div x-show="servicesOpen" x-transition:enter="submenu-enter" class="mt-2 ml-4 space-y-1 border-l-2 border-slate-700 pl-4">
+                <a href="{{ route('services-medicaux.index') }}" @click="sidebarOpen = false" class="flex items-center px-3 py-2 text-sm text-slate-300 hover:text-white hover:bg-slate-700/50 rounded-lg transition-colors {{ request()->routeIs('services-medicaux.*') ? 'text-cyan-400 bg-slate-700/50' : '' }}">
+                    <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"/>
+                    </svg>
+                    Services
+                </a>
+                <a href="{{ route('demandes-services.index') }}" @click="sidebarOpen = false" class="flex items-center px-3 py-2 text-sm text-slate-300 hover:text-white hover:bg-slate-700/50 rounded-lg transition-colors {{ request()->routeIs('demandes-services.*') ? 'text-cyan-400 bg-slate-700/50' : '' }}">
+                    <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"/>
+                    </svg>
+                    Demandes
+                </a>
+            </div>
+        </div>
 
         <a href="{{ route('dossier-professionnels.pending-validation') }}" @click="sidebarOpen = false"
            class="sidebar-link flex items-center px-3 py-3 rounded-xl {{ request()->routeIs('dossier-professionnels.pending-validation') ? 'active' : '' }}">

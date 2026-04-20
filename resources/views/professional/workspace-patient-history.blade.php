@@ -33,7 +33,7 @@
                     @if($consultations->isEmpty())
                         <p class="text-sm text-gray-500 dark:text-gray-400">Aucun historique pour cette recherche.</p>
                     @else
-                        <div class="overflow-x-auto">
+                        <div class="overflow-x-auto hidden md:block">
                             <table class="min-w-full text-sm">
                                 <thead>
                                     <tr class="text-left text-gray-500 dark:text-gray-400 border-b border-gray-200 dark:border-gray-700">
@@ -54,12 +54,30 @@
                                             <td class="py-3 pr-4 text-gray-600 dark:text-gray-300">{{ $consultation->rendezVous?->serviceProfessionnel?->nom ?? ucfirst((string) $consultation->type_service) }}</td>
                                             <td class="py-3 pr-4 text-gray-600 dark:text-gray-300">{{ ucfirst((string) $consultation->statut) }}</td>
                                             <td class="py-3 pr-4">
-                                                <a href="{{ route('professional.workspace.consultation.edit', $consultation) }}" class="text-blue-600 dark:text-blue-400 hover:underline">Ouvrir consultation-edit</a>
+                                                <a href="{{ route('professional.workspace.consultation.edit', $consultation) }}" class="text-blue-600 dark:text-blue-400 hover:underline">Detail</a>
                                             </td>
                                         </tr>
                                     @endforeach
                                 </tbody>
                             </table>
+                        </div>
+                        <div class="md:hidden space-y-3">
+                            @foreach($consultations as $consultation)
+                                <div class="rounded-xl border border-gray-200 dark:border-gray-700 p-4 bg-gray-50 dark:bg-gray-900/20">
+                                    <div class="flex justify-between items-start mb-2">
+                                        <div>
+                                            <p class="font-semibold text-gray-900 dark:text-gray-100">{{ $consultation->patient?->name ?? (($consultation->dossierMedical?->prenom ?? '') . ' ' . ($consultation->dossierMedical?->nom ?? '')) }}</p>
+                                            <p class="text-xs text-gray-500 dark:text-gray-400">{{ $consultation->numero_dossier_reference ?? $consultation->dossierMedical?->numero_unique ?? '—' }}</p>
+                                        </div>
+                                        <span class="px-2 py-1 rounded text-xs bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-300">{{ ucfirst((string) $consultation->statut) }}</span>
+                                    </div>
+                                    <div class="text-sm text-gray-600 dark:text-gray-300 mb-3">
+                                        <p>{{ $consultation->rendezVous?->serviceProfessionnel?->nom ?? ucfirst((string) $consultation->type_service) }}</p>
+                                        <p class="text-xs text-gray-500 dark:text-gray-400">{{ optional($consultation->created_at)->format('d/m/Y H:i') }}</p>
+                                    </div>
+                                    <a href="{{ route('professional.workspace.consultation.edit', $consultation) }}" class="block w-full text-center px-4 py-2 rounded-lg bg-cyan-600 hover:bg-cyan-700 text-white text-sm font-medium">Detail</a>
+                                </div>
+                            @endforeach
                         </div>
                         <div class="mt-4">{{ $consultations->links() }}</div>
                     @endif
